@@ -42,6 +42,6 @@ pip install -r requirements.txt
 **3. Ejecutar las pruebas**
 
 ```bash
-pytest -v
+pytest -v --html=reporte.html
 ```
 ---
