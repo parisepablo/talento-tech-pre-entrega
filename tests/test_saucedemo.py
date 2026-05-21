@@ -33,21 +33,24 @@ def test_catalog_products_displayed(driver):
     assert inventory_items[0].find_element(By.CSS_SELECTOR, "[data-test='inventory-item-name']").text == "Sauce Labs Backpack"
     assert inventory_items[0].find_element(By.CSS_SELECTOR, "[data-test='inventory-item-price']").text == "$29.99"
     assert inventory_items[0].find_element(By.CSS_SELECTOR, "[data-test='add-to-cart-sauce-labs-backpack']").is_displayed()
-    #Validate side menu
-    driver.find_element(By.ID, "react-burger-menu-btn").click()
-    assert wait.until(EC.presence_of_element_located((By.CLASS_NAME, "bm-menu"))).is_displayed()
-    assert driver.find_element(By.CSS_SELECTOR, "inventory-sidebar-link").is_displayed()
 
+def test_catalog_side_menu(driver):
+    login(driver, "standard_user", "secret_sauce")
+    wait = WebDriverWait(driver, 10)
+    driver.find_element(By.ID, "react-burger-menu-btn").click()
+    assert wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "bm-menu"))).is_displayed()
+    #assert driver.find_element(By.CSS_SELECTOR, "[data-test='inventory-sidebar-link']").is_displayed()
+    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-sidebar-link']"))).is_displayed()
 
 ## Cart test cases
 def test_add_product_to_cart(driver):
     login(driver, "standard_user", "secret_sauce")
     wait = WebDriverWait(driver, 10)
-    inventory_item_name = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-item-name']"))).text
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@data-test, 'add-to-cart')]"))).click
+    inventory_item_name = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-item-name']"))).text
+    driver.find_element(By.CSS_SELECTOR, "[data-test='add-to-cart-sauce-labs-backpack']").click()
     # Validate that cart badge shows 1 item
-    assert wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='shopping-cart-badge']"))).text == "1"
+    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='shopping-cart-badge']"))).text == "1"
     # Validate product is added to cart
     driver.find_element(By.CSS_SELECTOR, "[data-test='shopping-cart-link']").click()
-    cart_item_name = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-item-name']"))).text
+    cart_item_name = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='inventory-item-name']"))).text
     assert cart_item_name == inventory_item_name
