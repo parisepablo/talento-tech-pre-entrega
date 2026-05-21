@@ -33,6 +33,10 @@ def test_catalog_products_displayed(driver):
     assert inventory_items[0].find_element(By.CSS_SELECTOR, "[data-test='inventory-item-name']").text == "Sauce Labs Backpack"
     assert inventory_items[0].find_element(By.CSS_SELECTOR, "[data-test='inventory-item-price']").text == "$29.99"
     assert inventory_items[0].find_element(By.CSS_SELECTOR, "[data-test='add-to-cart-sauce-labs-backpack']").is_displayed()
+    #Validate side menu
+    driver.find_element(By.ID, "react-burger-menu-btn").click()
+    assert wait.until(EC.presence_of_element_located((By.CLASS_NAME, "bm-menu"))).is_displayed()
+    assert driver.find_element(By.CSS_SELECTOR, "inventory-sidebar-link").is_displayed()
 
 
 ## Cart test cases
